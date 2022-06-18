@@ -1,5 +1,3 @@
-# ES2077 :: Vite ReScript Template 
+# TodoList ReScript
 
-## Getting started 🚀
-
-Simply click on `Use this template` 😃
+Um TodoList feito com ReScript, React e Ancestor
