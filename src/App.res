@@ -1,10 +1,27 @@
 open Ancestor.Default
 
+Emotion.injectGlobal({
+  "html": {
+    "fontSize": "10px",
+  },
+  "html, body, #root": {
+    "width": "100%",
+    "height": "100%",
+    "margin": "0",
+    "padding": "0",
+  },
+  "root": {
+    "backgroundColor": Theme.Colors.black->Theme.Colors.toString
+  },
+  "*": {
+    "boxSizing": "border-box",
+    "fontFamily": Theme.Constants.fontFamily,
+  },
+})
+
 @react.component
 let make = () => {
-  <Box p=[xs(4)] bgColor=[xs(#hex("#000")), md(#hex("#cacaca"))]>
-    <Typography tag=#h2 color=[#xs(#hex("#fafafa")), #md(#hex("#000"))]>
-      {`Hello from Rescript and Vite`->React.string}
-    </Typography>
+  <Box p=[xs(4)] width=[xs(100.0->#pct)] height=[xs(100.0->#pct)] bgColor=[xs(Theme.Colors.black)]>
+    <div><Input placeholder="Nova task"  /></div>
   </Box>
 }
