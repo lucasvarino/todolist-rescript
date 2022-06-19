@@ -11,7 +11,7 @@ Emotion.injectGlobal({
     "padding": "0",
   },
   "root": {
-    "backgroundColor": Theme.Colors.black->Theme.Colors.toString
+    "backgroundColor": Theme.Colors.black->Theme.Colors.toString,
   },
   "*": {
     "boxSizing": "border-box",
@@ -21,7 +21,12 @@ Emotion.injectGlobal({
 
 @react.component
 let make = () => {
-  <Box p=[xs(4)] width=[xs(100.0->#pct)] height=[xs(100.0->#pct)] bgColor=[xs(Theme.Colors.black)]>
-    <div><Input placeholder="Nova task"  /></div>
+  <Box
+    py=[xs(4), md(9)]
+    px=[xs(4), md(9)]
+    width=[xs(100.0->#pct)]
+    height=[xs(100.0->#pct)]
+    bgColor=[xs(Theme.Colors.black)]>
+    <Tasks />
   </Box>
 }
