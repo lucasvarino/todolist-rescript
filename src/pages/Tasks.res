@@ -7,34 +7,33 @@ open Render
 module EmptyState = {
   @react.component
   let make = () => {
-    <Box minH=[xs(40.0->#rem)] display=[xs(#flex)] flexDirection=[xs(#column)] alignItems=[xs(#center)] justifyContent=[xs(#center)]>
+    <Box
+      minH=[xs(40.0->#rem)]
+      display=[xs(#flex)]
+      flexDirection=[xs(#column)]
+      alignItems=[xs(#center)]
+      justifyContent=[xs(#center)]>
       <Base tag=#img mb=[xs(3)] width=[xs(200->#px)] src=emptyState />
-
-      <Typography 
-      tag=#h1
-      m=[xs(0)]
-      mb=[xs(1)]
-      textAlign=[xs(#center)]
-      fontSize=[xs(2.4->#rem)]
-      fontWeight=[xs(#bold)]
-      letterSpacing=[xs(-0.055->#em)]
-      color=[xs(Theme.Colors.white)]      
-      >
+      <Typography
+        tag=#h1
+        m=[xs(0)]
+        mb=[xs(1)]
+        textAlign=[xs(#center)]
+        fontSize=[xs(2.4->#rem)]
+        fontWeight=[xs(#bold)]
+        letterSpacing=[xs(-0.055->#em)]
+        color=[xs(Theme.Colors.white)]>
         {`Não há tarefas pendentes`->s}
       </Typography>
-
-      <Typography 
-      tag=#p
-      m=[xs(0)]
-      textAlign=[xs(#center)]
-      fontSize=[xs(1.8->#rem)]
-      letterSpacing=[xs(-0.03->#em)]
-      color=[xs(Theme.Colors.grayLight)]      
-      >
+      <Typography
+        tag=#p
+        m=[xs(0)]
+        textAlign=[xs(#center)]
+        fontSize=[xs(1.8->#rem)]
+        letterSpacing=[xs(-0.03->#em)]
+        color=[xs(Theme.Colors.grayLight)]>
         {`Adicione sua primeira tarefa utilizando o campo acima`->s}
       </Typography>
-
-
     </Box>
   }
 }
@@ -50,8 +49,7 @@ module TaskItem = {
       borderRadius=[xs(1)]
       display=[xs(#flex)]
       justifyContent=[xs(#"space-between")]
-      alignItems=[xs(#center)]
-      >
+      alignItems=[xs(#center)]>
       <Box>
         <Typography
           tag=#p
