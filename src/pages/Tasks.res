@@ -98,6 +98,8 @@ module NewTaskInput = {
   }
 }
 
+let _ = TasksHook.useTasks
+
 @react.component
 let make = () => {
   <Box display=[xs(#flex)] flexDirection=[xs(#column)] alignItems=[xs(#center)]>

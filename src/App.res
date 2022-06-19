@@ -19,6 +19,8 @@ Emotion.injectGlobal({
   },
 })
 
+let client = ReactQuery.Provider.createClient()
+
 @react.component
 let make = () => {
   <Box
