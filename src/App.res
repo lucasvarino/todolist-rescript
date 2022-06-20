@@ -23,6 +23,7 @@ let client = ReactQuery.Provider.createClient()
 
 @react.component
 let make = () => {
+  <ReactQuery.Provider client>
   <Box
     py=[xs(4), md(9)]
     px=[xs(4), md(9)]
@@ -31,4 +32,5 @@ let make = () => {
     bgColor=[xs(Theme.Colors.black)]>
     <Tasks />
   </Box>
+  </ReactQuery.Provider>
 }

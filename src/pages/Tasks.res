@@ -98,10 +98,10 @@ module NewTaskInput = {
   }
 }
 
-let _ = TasksHook.useTasks
-
 @react.component
 let make = () => {
+  let result = TasksHook.useTasks()
+
   <Box display=[xs(#flex)] flexDirection=[xs(#column)] alignItems=[xs(#center)]>
     <Box display=[xs(#flex)] justifyContent=[xs(#center)] tag=#header> <img src=logo /> </Box>
     <Box
@@ -111,12 +111,16 @@ let make = () => {
       display=[xs(#flex)]
       flexDirection=[xs(#column)]>
       <NewTaskInput />
-      /* <Box mt=[xs(4)]>
-        <TaskItem name="Lorem ipsum dolor sit amet" createdAt="11/10/2021" completed=false />
-        <TaskItem name="Lorem ipsum dolor sit amet" createdAt="11/10/2021" completed=true />
-        <TaskItem name="Lorem ipsum dolor sit amet" createdAt="11/10/2021" completed=false />
-      </Box> */
-      <EmptyState />
+      <Box mt=[xs(4)]>
+        {switch result {
+        | Loading => "Loading..."->s
+        | Error => "Error: :("->s
+        | Data([]) => <EmptyState />
+        | Data(tasks) => tasks->map(({name, completed, createdAt}, key) => {
+            <TaskItem key name completed createdAt />
+          })
+        }}
+      </Box>
     </Box>
   </Box>
 }
