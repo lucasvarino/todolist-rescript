@@ -1,9 +1,6 @@
 open Ancestor.Default
 open Render
-
-@module("../assets/logo.svg") external logo: string = "default"
-@module("../assets/empty-state.svg") external emptyState: string = "default"
-@module("../assets/spinner.svg") external spinner: string = "default"
+open Assets
 
 let formatDate = date => date->Js.Date.fromString->DateFns.format("dd/MM/yy hh:mm")
 
