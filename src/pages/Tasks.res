@@ -3,6 +3,7 @@ open Render
 
 @module("../assets/logo.svg") external logo: string = "default"
 @module("../assets/empty-state.svg") external emptyState: string = "default"
+@module("../assets/spinner.svg") external spinner: string = "default"
 
 let formatDate = date => date->Js.Date.fromString->DateFns.format("dd/MM/yy hh:mm")
 
@@ -40,6 +41,39 @@ module EmptyState = {
   }
 }
 
+module ErrorMessage = {
+  @react.component
+  let make = () => {
+    <Box
+      minH=[xs(40.0->#rem)]
+      display=[xs(#flex)]
+      flexDirection=[xs(#column)]
+      alignItems=[xs(#center)]
+      justifyContent=[xs(#center)]>
+      <Typography
+        tag=#h1
+        m=[xs(0)]
+        mb=[xs(1)]
+        textAlign=[xs(#center)]
+        fontSize=[xs(2.4->#rem)]
+        fontWeight=[xs(#bold)]
+        letterSpacing=[xs(-0.055->#em)]
+        color=[xs(Theme.Colors.white)]>
+        {`Ocorreu algo inesperado`->s}
+      </Typography>
+      <Typography
+        tag=#p
+        m=[xs(0)]
+        textAlign=[xs(#center)]
+        fontSize=[xs(1.8->#rem)]
+        letterSpacing=[xs(-0.03->#em)]
+        color=[xs(Theme.Colors.grayLight)]>
+        {`Ocorreu um erro, por favor tente novamente`->s}
+      </Typography>
+    </Box>
+  }
+}
+
 module TaskItem = {
   @react.component
   let make = (~name, ~createdAt, ~completed) => {
@@ -72,6 +106,20 @@ module TaskItem = {
         </Typography>
       </Box>
       <Checkbox checked=completed />
+    </Box>
+  }
+}
+
+module Spinner = {
+  @react.component
+  let make = () => {
+    <Box
+      minH=[xs(40.0->#rem)]
+      width=[xs(100.0->#pct)]
+      display=[xs(#flex)]
+      justifyContent=[xs(#center)]
+      alignItems=[xs(#center)]>
+      <Base tag=#img src=spinner width=[xs(5.6->#rem)]/>
     </Box>
   }
 }
@@ -115,17 +163,12 @@ let make = () => {
       <NewTaskInput />
       <Box mt=[xs(4)]>
         {switch result {
-        | Loading => "Loading..."->s
-        | Error => "Error: :("->s
+        | Loading => <Spinner />
+        | Error => <ErrorMessage />
         | Data([]) => <EmptyState />
         | Data(tasks) =>
           tasks->map(({name, completed, createdAt}, key) => {
-            <TaskItem
-              key
-              name
-              completed
-              createdAt={createdAt->formatDate}
-            />
+            <TaskItem key name completed createdAt={createdAt->formatDate} />
           })
         }}
       </Box>
