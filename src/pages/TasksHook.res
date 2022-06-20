@@ -1,4 +1,17 @@
-let {queryOptions, useQuery} = module(ReactQuery)
+type requestResult =
+  | Data(array<TaskTypes.t>)
+  | Loading
+  | Error
+
+type hookResult = {
+  isCreating: bool,
+  result: requestResult,
+  taskName: string,
+  handleCreateTask: ReactEvent.Mouse.t => unit,
+  handleChange: ReactEvent.Form.t => unit,
+}
+
+let {queryOptions, useQuery, mutationOptions, useMutation} = module(ReactQuery)
 
 let apiUrl = "http://localhost:3001"
 
@@ -12,22 +25,28 @@ let handleFetch = _ => {
   ->thenResolve(json => Jzon.decodeWith(json, apiCodec))
 }
 
-let _ = handleFetch()
+let handleCreateTask = (taskName: string) => {
+  let newTask = {
+    "name": taskName,
+    "completed": false,
+    "createdAt": Js.Date.make(),
+  }
 
-type requestResult =
-  | Data(array<TaskTypes.t>)
-  | Loading
-  | Error
-
-type hookResult = {
-  result: requestResult,
-  taskName: string,
-  handleCreateTask: ReactEvent.Mouse.t => unit,
-  handleChange: ReactEvent.Form.t => unit,
+  Fetch.fetch(
+    `${apiUrl}/tasks`,
+    {
+      "method": "POST",
+      "body": Js.Json.stringifyAny(newTask),
+      "headers": {
+        "Content-Type": "application/json",
+      },
+    },
+  )
 }
 
 let useTasks = () => {
   let (taskName, setTaskName) = React.useState(_ => "")
+
   let result = useQuery(
     queryOptions(
       ~queryKey="tasks",
@@ -37,17 +56,36 @@ let useTasks = () => {
     ),
   )
 
+  let handleRefetch = (_, _, _) => {
+    setTaskName(_ => "")
+
+    result.refetch({
+      throwOnError: false,
+      cancelRefetch: false,
+    })
+  }
+
+  let {mutate: createTaskMutation, isLoading} = useMutation(
+    mutationOptions(
+      ~onSuccess=handleRefetch,
+      ~mutationFn=handleCreateTask,
+      ~mutationKey="new-task",
+      (),
+    ),
+  )
+
+  let handleCreateTask = _ => {
+    createTaskMutation(. taskName, None)
+  }
+
   let handleChange = event => {
     let target = ReactEvent.Form.target(event)
 
     setTaskName(_ => target["value"])
   }
 
-  let handleCreateTask = _ => {
-    Js.log(taskName)
-  }
-
   {
+    isCreating: isLoading,
     taskName: taskName,
     handleChange: handleChange,
     handleCreateTask: handleCreateTask,

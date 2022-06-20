@@ -123,7 +123,7 @@ module Spinner = {
 
 module NewTaskInput = {
   @react.component
-  let make = (~onChange, ~onSubmit, ~taskName) => {
+  let make = (~onChange, ~onSubmit, ~taskName, ~isLoading) => {
     <Box>
       <Typography
         tag=#label
@@ -138,7 +138,9 @@ module NewTaskInput = {
       <Box mt=[xs(2)] position=[xs(#relative)]>
         <Input value=taskName onChange placeholder="Compras da Semana" />
         <Box position=[xs(#absolute)] right=[xs(8->#px)] top=[xs(8->#px)]>
-          <Button disabled={taskName === ""} onClick=onSubmit> `Adicionar` </Button>
+          <Button loading=isLoading disabled={taskName === "" || isLoading} onClick=onSubmit>
+            `Adicionar`
+          </Button>
         </Box>
       </Box>
     </Box>
@@ -147,7 +149,7 @@ module NewTaskInput = {
 
 @react.component
 let make = () => {
-  let {result, handleChange, handleCreateTask, taskName} = TasksHook.useTasks()
+  let {result, handleChange, handleCreateTask, taskName, isCreating} = TasksHook.useTasks()
 
   <Box display=[xs(#flex)] flexDirection=[xs(#column)] alignItems=[xs(#center)]>
     <Box display=[xs(#flex)] justifyContent=[xs(#center)] tag=#header> <img src=logo /> </Box>
@@ -157,7 +159,7 @@ let make = () => {
       width=[xs(100.0->#pct)]
       display=[xs(#flex)]
       flexDirection=[xs(#column)]>
-      <NewTaskInput taskName onChange=handleChange onSubmit=handleCreateTask />
+      <NewTaskInput isLoading=isCreating taskName onChange=handleChange onSubmit=handleCreateTask />
       <Box mt=[xs(4)]>
         {switch result {
         | Loading => <Spinner />
