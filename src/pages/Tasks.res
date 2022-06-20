@@ -4,6 +4,8 @@ open Render
 @module("../assets/logo.svg") external logo: string = "default"
 @module("../assets/empty-state.svg") external emptyState: string = "default"
 
+let formatDate = date => date->Js.Date.fromString->DateFns.format("dd/MM/yy hh:mm")
+
 module EmptyState = {
   @react.component
   let make = () => {
@@ -116,8 +118,14 @@ let make = () => {
         | Loading => "Loading..."->s
         | Error => "Error: :("->s
         | Data([]) => <EmptyState />
-        | Data(tasks) => tasks->map(({name, completed, createdAt}, key) => {
-            <TaskItem key name completed createdAt />
+        | Data(tasks) =>
+          tasks->map(({name, completed, createdAt}, key) => {
+            <TaskItem
+              key
+              name
+              completed
+              createdAt={createdAt->formatDate}
+            />
           })
         }}
       </Box>
