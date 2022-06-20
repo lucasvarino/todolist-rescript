@@ -1,5 +1,3 @@
-
-
 let {queryOptions, useQuery} = module(ReactQuery)
 
 let apiUrl = "http://localhost:3001"
@@ -21,7 +19,15 @@ type requestResult =
   | Loading
   | Error
 
+type hookResult = {
+  result: requestResult,
+  taskName: string,
+  handleCreateTask: ReactEvent.Mouse.t => unit,
+  handleChange: ReactEvent.Form.t => unit,
+}
+
 let useTasks = () => {
+  let (taskName, setTaskName) = React.useState(_ => "")
   let result = useQuery(
     queryOptions(
       ~queryKey="tasks",
@@ -31,12 +37,27 @@ let useTasks = () => {
     ),
   )
 
-  switch result {
-  | {isLoading: true} => Loading
-  | {isError: true}
-  | {data: Some(Error(_))} =>
-    Error
-  | {data: Some(Ok(tasks)), isLoading: false, isError: false} => Data(tasks)
-  | _ => Error
+  let handleChange = event => {
+    let target = ReactEvent.Form.target(event)
+
+    setTaskName(_ => target["value"])
+  }
+
+  let handleCreateTask = _ => {
+    Js.log(taskName)
+  }
+
+  {
+    taskName: taskName,
+    handleChange: handleChange,
+    handleCreateTask: handleCreateTask,
+    result: switch result {
+    | {isLoading: true} => Loading
+    | {isError: true}
+    | {data: Some(Error(_))} =>
+      Error
+    | {data: Some(Ok(tasks)), isLoading: false, isError: false} => Data(tasks)
+    | _ => Error
+    },
   }
 }
